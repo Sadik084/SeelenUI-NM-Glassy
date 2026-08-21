@@ -67,9 +67,16 @@ settings:
     step: 1
 
   - syntax: <length>
-    name: --neo-glass-toolbar-margin
-    label: "Toolbar zone vertical margin"
-    description: "Vertical gap between each toolbar zone (left/center/right) and the bar's top/bottom edge. Also caps each zone's max height, so this is what keeps a zone from puffing out."
+    name: --neo-glass-toolbar-margin-top
+    label: "Toolbar zone top margin"
+    description: "Gap between each toolbar zone and the top edge of the bar. Reduce this to pull the zones closer to the top. Also caps zone height, so this is part of what keeps a zone from puffing out."
+    initialValue: 6
+    initialValueUnit: px
+
+  - syntax: <length>
+    name: --neo-glass-toolbar-margin-bottom
+    label: "Toolbar zone bottom margin"
+    description: "Gap between each toolbar zone and the bottom edge of the bar."
     initialValue: 6
     initialValueUnit: px
 
@@ -80,8 +87,15 @@ settings:
     initialValueUnit: px
 
   - syntax: <length>
-    name: --neo-glass-toolbar-padding-y
-    label: "Toolbar zone vertical padding"
+    name: --neo-glass-toolbar-padding-top
+    label: "Toolbar zone top padding"
+    description: "Inner spacing above the icons/content inside each zone. Reduce this to tighten the top of the pill."
+    initialValue: 4
+    initialValueUnit: px
+
+  - syntax: <length>
+    name: --neo-glass-toolbar-padding-bottom
+    label: "Toolbar zone bottom padding"
     initialValue: 4
     initialValueUnit: px
 
@@ -211,9 +225,9 @@ styles:
       display: flex;
       align-items: center;
       gap: var(--neo-glass-item-gap, 2px);
-      padding: var(--neo-glass-toolbar-padding-y, 4px) var(--neo-glass-toolbar-padding-x, 8px);
-      height: calc(100% - (var(--neo-glass-toolbar-margin, 6px) * 2));
-      margin: var(--neo-glass-toolbar-margin, 6px) 0;
+      padding: var(--neo-glass-toolbar-padding-top, 4px) var(--neo-glass-toolbar-padding-x, 8px) var(--neo-glass-toolbar-padding-bottom, 4px);
+      height: calc(100% - var(--neo-glass-toolbar-margin-top, 6px) - var(--neo-glass-toolbar-margin-bottom, 6px));
+      margin: var(--neo-glass-toolbar-margin-top, 6px) 0 var(--neo-glass-toolbar-margin-bottom, 6px);
       box-sizing: border-box;
       overflow: hidden;
 
