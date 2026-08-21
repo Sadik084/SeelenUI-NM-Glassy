@@ -151,6 +151,7 @@ styles:
       -webkit-backdrop-filter: none !important;
       border: none !important;
       box-shadow: none !important;
+      align-items: stretch !important;
       gap: 8px;
     }
 
@@ -159,7 +160,10 @@ styles:
       align-items: center;
       gap: 2px;
       padding: 4px 8px;
+      height: calc(100% - 12px);
       margin: 6px 0;
+      box-sizing: border-box;
+      overflow: hidden;
 
       background-color: oklch(from var(--slu-std-bg-color) l c h / calc(var(--neo-glass-opacity, 55) / 100));
       backdrop-filter: blur(var(--neo-glass-blur, 22px)) saturate(1.6);
@@ -172,6 +176,10 @@ styles:
 
     .ft-bar-container:empty {
       display: none;
+    }
+
+    .ft-bar-item {
+      max-height: 100%;
     }
 
     .ft-bar-left {
