@@ -66,19 +66,71 @@ settings:
     max: 98
     step: 1
 
+  - syntax: <length>
+    name: --neo-glass-toolbar-margin
+    label: "Toolbar zone vertical margin"
+    description: "Vertical gap between each toolbar zone (left/center/right) and the bar's top/bottom edge. Also caps each zone's max height, so this is what keeps a zone from puffing out."
+    initialValue: 6
+    initialValueUnit: px
+
+  - syntax: <length>
+    name: --neo-glass-toolbar-padding-x
+    label: "Toolbar zone horizontal padding"
+    initialValue: 8
+    initialValueUnit: px
+
+  - syntax: <length>
+    name: --neo-glass-toolbar-padding-y
+    label: "Toolbar zone vertical padding"
+    initialValue: 4
+    initialValueUnit: px
+
+  - syntax: <length>
+    name: --neo-glass-item-gap
+    label: "Gap between toolbar items"
+    initialValue: 2
+    initialValueUnit: px
+
+  - syntax: <number>
+    name: --neo-glass-shadow-strength
+    label: "Shadow strength (%)"
+    description: "Opacity of the drop shadow under the dock, toolbar, and popup panels."
+    initialValue: 25
+    min: 0
+    max: 60
+    step: 1
+
+  - syntax: <number>
+    name: --neo-glass-saturation
+    label: "Backdrop saturation"
+    description: "Color saturation boost applied to whatever is behind the glass. Higher = punchier colors through the blur."
+    initialValue: 1.6
+    min: 1
+    max: 3
+    step: 0.1
+
+  - syntax: <number>
+    name: --neo-glass-hover-glow-opacity
+    label: "Hover glow strength (%)"
+    description: "Accent-color glow intensity when hovering dock/toolbar items."
+    initialValue: 18
+    min: 0
+    max: 60
+    step: 1
+
 styles:
   "@seelen/weg": |
     :root {
-      --neo-glow: oklch(from var(--system-accent-color) l c h / 0.18);
-      --neo-glow-ring: oklch(from var(--system-accent-color) l c h / 0.35);
+      --neo-glow: oklch(from var(--system-accent-color) l c h / calc(var(--neo-glass-hover-glow-opacity, 18) / 100));
+      --neo-glow-ring: oklch(from var(--system-accent-color) l c h / calc(var(--neo-glass-hover-glow-opacity, 18) * 1.9 / 100));
     }
 
     .taskbar {
       background-color: oklch(from var(--slu-std-bg-color) l c h / calc(var(--neo-glass-opacity, 55) / 100));
-      backdrop-filter: blur(var(--neo-glass-blur, 22px)) saturate(1.6);
-      -webkit-backdrop-filter: blur(var(--neo-glass-blur, 22px)) saturate(1.6);
+      backdrop-filter: blur(var(--neo-glass-blur, 22px)) saturate(var(--neo-glass-saturation, 1.6));
+      -webkit-backdrop-filter: blur(var(--neo-glass-blur, 22px)) saturate(var(--neo-glass-saturation, 1.6));
       border: 1px solid oklch(from var(--slu-std-fg-color) l c h / calc(var(--neo-glass-border-opacity, 16) / 100));
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, calc(var(--neo-glass-shadow-strength, 25) / 100)), inset 0 1px 0 rgba(255, 255, 255, 0.06);
       transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
@@ -119,11 +171,11 @@ styles:
       background-color: rgba(20, 20, 20, 0.9);
       background-color: oklch(from var(--slu-std-bg-color) l c h / calc(var(--neo-glass-popover-opacity, 90) / 100));
       background-image: linear-gradient(135deg, oklch(from var(--slu-std-fg-color) l c h / 0.10) 0%, transparent 40%);
-      backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(2.4);
-      -webkit-backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(2.4);
+      backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(calc(var(--neo-glass-saturation, 1.6) * 1.5));
+      -webkit-backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(calc(var(--neo-glass-saturation, 1.6) * 1.5));
       border: 1px solid oklch(from var(--slu-std-fg-color) l c h / calc(var(--neo-glass-border-opacity, 16) / 100));
       border-radius: calc(var(--neo-glass-radius, 20) * 1px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 oklch(from var(--slu-std-fg-color) l c h / 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, calc(var(--neo-glass-shadow-strength, 25) / 100)), inset 0 1px 0 oklch(from var(--slu-std-fg-color) l c h / 0.12);
     }
 
     .weg-item-preview-topbar {
@@ -141,8 +193,8 @@ styles:
 
   "@seelen/fancy-toolbar": |
     :root {
-      --neo-glow: oklch(from var(--system-accent-color) l c h / 0.18);
-      --neo-glow-ring: oklch(from var(--system-accent-color) l c h / 0.32);
+      --neo-glow: oklch(from var(--system-accent-color) l c h / calc(var(--neo-glass-hover-glow-opacity, 18) / 100));
+      --neo-glow-ring: oklch(from var(--system-accent-color) l c h / calc(var(--neo-glass-hover-glow-opacity, 18) * 1.75 / 100));
     }
 
     .ft-bar {
@@ -158,19 +210,19 @@ styles:
     .ft-bar-container {
       display: flex;
       align-items: center;
-      gap: 2px;
-      padding: 4px 8px;
-      height: calc(100% - 12px);
-      margin: 6px 0;
+      gap: var(--neo-glass-item-gap, 2px);
+      padding: var(--neo-glass-toolbar-padding-y, 4px) var(--neo-glass-toolbar-padding-x, 8px);
+      height: calc(100% - (var(--neo-glass-toolbar-margin, 6px) * 2));
+      margin: var(--neo-glass-toolbar-margin, 6px) 0;
       box-sizing: border-box;
       overflow: hidden;
 
       background-color: oklch(from var(--slu-std-bg-color) l c h / calc(var(--neo-glass-opacity, 55) / 100));
-      backdrop-filter: blur(var(--neo-glass-blur, 22px)) saturate(1.6);
-      -webkit-backdrop-filter: blur(var(--neo-glass-blur, 22px)) saturate(1.6);
+      backdrop-filter: blur(var(--neo-glass-blur, 22px)) saturate(var(--neo-glass-saturation, 1.6));
+      -webkit-backdrop-filter: blur(var(--neo-glass-blur, 22px)) saturate(var(--neo-glass-saturation, 1.6));
       border: 1px solid oklch(from var(--slu-std-fg-color) l c h / calc(var(--neo-glass-border-opacity, 16) / 100));
       border-radius: calc(var(--neo-glass-radius, 20) * 1px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, calc(var(--neo-glass-shadow-strength, 25) / 100)), inset 0 1px 0 rgba(255, 255, 255, 0.06);
       transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
@@ -222,10 +274,10 @@ styles:
       background-color: rgba(20, 20, 20, 0.9) !important;
       background-color: oklch(from var(--slu-std-bg-color) l c h / calc(var(--neo-glass-popover-opacity, 90) / 100)) !important;
       background-image: linear-gradient(135deg, oklch(from var(--slu-std-fg-color) l c h / 0.10) 0%, transparent 40%) !important;
-      backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(2.4) !important;
-      -webkit-backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(2.4) !important;
+      backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(calc(var(--neo-glass-saturation, 1.6) * 1.5)) !important;
+      -webkit-backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(calc(var(--neo-glass-saturation, 1.6) * 1.5)) !important;
       border: 1px solid oklch(from var(--slu-std-fg-color) l c h / calc(var(--neo-glass-border-opacity, 16) / 100)) !important;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 oklch(from var(--slu-std-fg-color) l c h / 0.12) !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, calc(var(--neo-glass-shadow-strength, 25) / 100)), inset 0 1px 0 oklch(from var(--slu-std-fg-color) l c h / 0.12) !important;
     }
 
     .slu-std-popover,
@@ -261,11 +313,11 @@ styles:
       background-color: rgba(20, 20, 20, 0.9) !important;
       background-color: oklch(from var(--slu-std-bg-color) l c h / calc(var(--neo-glass-popover-opacity, 90) / 100)) !important;
       background-image: linear-gradient(135deg, oklch(from var(--slu-std-fg-color) l c h / 0.10) 0%, transparent 40%) !important;
-      backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(2.4) !important;
-      -webkit-backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(2.4) !important;
+      backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(calc(var(--neo-glass-saturation, 1.6) * 1.5)) !important;
+      -webkit-backdrop-filter: blur(var(--neo-glass-popover-blur, 46px)) saturate(calc(var(--neo-glass-saturation, 1.6) * 1.5)) !important;
       border: 1px solid oklch(from var(--slu-std-fg-color) l c h / calc(var(--neo-glass-border-opacity, 16) / 100)) !important;
       border-radius: calc(var(--neo-glass-radius, 20) * 1px) !important;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 oklch(from var(--slu-std-fg-color) l c h / 0.12) !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, calc(var(--neo-glass-shadow-strength, 25) / 100)), inset 0 1px 0 oklch(from var(--slu-std-fg-color) l c h / 0.12) !important;
     }
 
     .media-control-label {
